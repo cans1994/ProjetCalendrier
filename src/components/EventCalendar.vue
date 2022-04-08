@@ -2,11 +2,13 @@
 import { reactive } from "vue"; // => est la capacité pour une variable (array, string, number, object, etc) de se mettre à jour lorsque sa valeur ou toute autre variable à laquelle elle fait référence est modifiée après la déclaration
 import "@fullcalendar/core/vdom"; // solves problem with Vite
 import FullCalendar from "@fullcalendar/vue3";
+import { Calendar } from "@fullcalendar/core";
 import frLocale from "@fullcalendar/core/locales/fr";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 // import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
+import { cloneElement } from "preact";
 //import useEvents from '../composables/useEvents.js'
 
 //const id = ref(10);
@@ -25,8 +27,14 @@ const options = reactive({
   editable: true,
   selectable: true,
   weekends: true,
+  initialView: "dayGridMonth",
+  dateClick: function (info) {
+    alert("Clicked on: " + info.dateStr);
+    alert("Current view: " + info.view.type);
+    // change the day's background color just for fun
+    info.dayEl.style.backgroundColor = "red";
+  },
   select: (arg) => {
-    //argument est passé à la directive
     id.value = id.value + 1;
 
     let str = formatDate("2018-09-01", {
