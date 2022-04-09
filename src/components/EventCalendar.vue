@@ -22,6 +22,7 @@ const options = reactive({
   },
   editable: true,
   selectable: true,
+  selectMirror: true,
   weekends: true,
   events: "EVENTS",
   initialView: "dayGridMonth",
@@ -35,32 +36,43 @@ const options = reactive({
     startTime: "08:00", // dispo de telle heure
     endTime: "18:00", // à telle heure
   },
-  eventSources: [
-    // your event source
-    {
-      events: [
-        // put the array in the `events` property
-        {
-          title: "",
-          start: "2022-04-01",
-        },
-        {
-          title: "",
-          start: "2022-04-05",
-          end: "2022-04-27",
-        },
-      ],
-      backgroundColor: "red", // an option!
-      textColor: "black", // an option!
-    },
+  // eventSources: [
+  //   // your event source
+  //   {
+  //     events: [
+  //       // put the array in the `events` property
+  //       {
+  //         title: "",
+  //         start: "2022-04-01",
+  //       },
+  //       {
+  //         title: "",
+  //         start: "2022-04-05",
+  //         end: "2022-04-27",
+  //       },
+  //     ],
+  //     backgroundColor: "red", // an option!
+  //     textColor: "black", // an option!
+  //   },
 
-    // any other event sources...
+  //   // any other event sources...
+  // ],
+  initialDate: "2022-04-10",
+  initialView: "dayGridMonth",
+  events: [
+    {
+      start: "2022-04-11",
+      end: "2022-04-15",
+      display: "background",
+      backgroundColor: "red",
+    },
+    {
+      start: "2022-04-05",
+      end: "2022-04-08",
+      display: "background",
+      backgroundColor: "green",
+    },
   ],
-  eventDidMount: function (info) {
-    if (info.event.extendedProps.background) {
-      info.el.style.background = info.event.extendedProps.background;
-    }
-  },
 });
 </script>
 
