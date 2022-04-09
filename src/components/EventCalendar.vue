@@ -37,7 +37,7 @@ const options = reactive({
     endTime: "18:00", // à telle heure
   },
   // eventSources: [
-  //   // your event source
+  //   // source évènement
   //   {
   //     events: [
   //       // put the array in the `events` property
@@ -54,8 +54,6 @@ const options = reactive({
   //     backgroundColor: "red", // an option!
   //     textColor: "black", // an option!
   //   },
-
-  //   // any other event sources...
   // ],
   initialDate: "2022-04-10",
   initialView: "dayGridMonth",
