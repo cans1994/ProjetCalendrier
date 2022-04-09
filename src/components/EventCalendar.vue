@@ -1,22 +1,22 @@
 <script setup>
-import { reactive } from "vue"; // => est la capacité pour une variable (array, string, number, object, etc) de se mettre à jour lorsque sa valeur ou toute autre variable à laquelle elle fait référence est modifiée après la déclaration
+import { ref, reactive } from "vue"; // => est la capacité pour une variable (array, string, number, object, etc) de se mettre à jour lorsque sa valeur ou toute autre variable à laquelle elle fait référence est modifiée après la déclaration
 import "@fullcalendar/core/vdom"; // solves problem with Vite
 import FullCalendar from "@fullcalendar/vue3";
 import { Calendar } from "@fullcalendar/core";
 import frLocale from "@fullcalendar/core/locales/fr";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-// import listPlugin from "@fullcalendar/list";
+import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 import { cloneElement } from "preact";
-//import useEvents from '../composables/useEvents.js'
+import { mapGetters } from "vuex";
 
-//const id = ref(10);
+const id = ref(10);
 
 //const ( getEvents ) = useEvents[]
 
 const options = reactive({
-  plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+  plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
   initialView: "dayGridMonth",
   locale: frLocale,
   headerToolbar: {
@@ -27,70 +27,25 @@ const options = reactive({
   editable: true,
   selectable: true,
   weekends: true,
+  events: [],
   initialView: "dayGridMonth",
   dateClick: function (info) {
-    alert("Clicked on: " + info.dateStr);
-    alert("Current view: " + info.view.type);
-    // change the day's background color just for fun
-    info.dayEl.style.backgroundColor = "red";
+    info.dayEl.style.backgroundColor = "lightgreen";
   },
-  select: (arg) => {
-    id.value = id.value + 1;
+  businessHours: {
+    // horaires de travail . an array of zero-based day of week integers (0= dimanche)
+    daysOfWeek: [1, 2, 3, 4, 5], // lundi - vendredi
 
-    let str = formatDate("2018-09-01", {
-      month: "long",
-      year: "numeric",
-      day: "numeric",
-      timeZoneName: "short",
-      timeZone: "UTC+2",
-      locale: "fr",
-    });
-
-    const cal = arg.view.calendar;
-    cal.unselect();
-    cal.addEvent({
-      id: `${id.value}`,
-      title: `New event ${id.value}`,
-      start: arg.start,
-      end: arg.end,
-      allDay: true,
-    });
-  },
-  eventClick: (arg) => {
-    if (arg.event) {
-      arg.event.remove();
-    }
-  },
-  events: [],
-  eventAdd: (arg) => {
-    createEvent({
-      id: arg.event.id,
-      title: arg.event.title,
-      start: arg.event.start,
-      end: arg.event.end,
-      allDay: arg.event.allDay,
-    });
-  },
-  eventChange: (arg) => {
-    updateEvent({
-      id: arg.event.id,
-      title: arg.event.start,
-      start: arg.event.start,
-      end: arg.event.end,
-      allDay: arg.event.allDay,
-    });
-  },
-  eventRemove: (arg) => {
-    deleteEvent(arg.event.id);
+    startTime: "08:00", // dispo de telle heure
+    endTime: "18:00", // à telle heure
   },
 });
-
-// options.events = getEvents.value;
-// watch(getEvents, () => {
-//   options.events = getEvents.value;
-// });
 </script>
 
 <template>
-  <FullCalendar v-bind:options="options" />
+  <FullCalendar
+    v-bind:options="options"
+    events="EVENTS"
+    @select="handleSelect"
+  /><!--La directive v-bind demande à Vue de synchroniser l'attribut id de l'élément avec la propriété options du composant-->
 </template>
